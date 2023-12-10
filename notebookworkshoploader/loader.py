@@ -7,14 +7,16 @@ import ipywidgets as widgets
 from ipywidgets import HBox, VBox
 from IPython.display import display
 
-def load_remote_env(*, env_url, file=None):
+ENV_URL = "https://notebook-workshop-api-voldmqr2bq-uc.a.run.app"
+
+def load_remote_env(*, file=None):
     def on_load(b):
         try:
             key = workshop_key.value
             if file is not None:
-                resp = requests.get(f'{env_url}/api/workshop?key={key}&file={os.path.basename(file)}', timeout=5)
+                resp = requests.get(f'{ENV_URL}/api/workshop?key={key}&file={os.path.basename(file)}', timeout=5)
             else:
-                resp = requests.get(f'{env_url}/api/workshop?key={key}', timeout=5)
+                resp = requests.get(f'{ENV_URL}/api/workshop?key={key}', timeout=5)
             if resp.status_code == 200:
                 env_encoded = resp.json()['env_encoded']
                 load_dotenv(stream=StringIO(base64.b64decode(env_encoded).decode()), override=True)
