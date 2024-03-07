@@ -8,9 +8,9 @@ from ipywidgets import HBox, VBox
 from IPython.display import display
 
 def load_remote_env(*, env_url, file=None):
-    def on_load(b):
+
+    def load(key):
         try:
-            key = workshop_key.value
             if file is not None:
                 resp = requests.get(f'{env_url}/api/workshop?key={key}&file={os.path.basename(file)}', timeout=5)
             else:
@@ -26,11 +26,18 @@ def load_remote_env(*, env_url, file=None):
         except Exception as e:
             print('Unknown error trying to load workshop environment variables', e)
 
-    instructions = widgets.Label(value="Please enter the Workshop Key provided by the instructor:")
-    workshop_key = widgets.Text(placeholder='Workshop Key', disabled=False)
-    load_workshop = widgets.Button(description='Load')
-    load_workshop.on_click(on_load)
-    hbox = HBox([workshop_key, load_workshop])
-    vbox = VBox([instructions, hbox])
-    display(vbox)
+    def on_load(b):
+        load(workshop_key.value)
+
+    env_key = os.environ.get('WORKSHOP_KEY')
+    if env_key is not None:
+        load(env_key)
+    else:
+        instructions = widgets.Label(value="Please enter the Workshop Key provided by the instructor:")
+        workshop_key = widgets.Text(placeholder='Workshop Key', disabled=False)
+        load_workshop = widgets.Button(description='Load')
+        load_workshop.on_click(on_load)
+        hbox = HBox([workshop_key, load_workshop])
+        vbox = VBox([instructions, hbox])
+        display(vbox)
     
