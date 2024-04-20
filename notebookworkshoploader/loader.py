@@ -23,7 +23,7 @@ def load_remote_env(*, env_url, file=None):
 
     def load(key):
         resp = validate_workshop(key, NEW_APISERVER_URL)
-        if env_url != NEW_APISERVER_URL and (isinstance(resp, Exception) or resp.status_code == 404):
+        if env_url != NEW_APISERVER_URL and (isinstance(resp, Exception) or resp.status_code != 200):
             resp = validate_workshop(key, env_url)
         if isinstance(resp, Exception):
             print('Unknown error trying to load workshop environment variables', resp)
