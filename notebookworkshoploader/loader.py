@@ -12,14 +12,11 @@ NEW_APISERVER_URL = "https://workshop-setup-api-voldmqr2bq-uc.a.run.app"
 def load_remote_env(*, env_url, file=None):
 
     def validate_workshop(key, api_server_url):
-        try:
-            if file is not None:
-                resp = requests.get(f'{api_server_url}/api/workshop?key={key}&file={os.path.basename(file)}', timeout=5)
-            else:
-                resp = requests.get(f'{api_server_url}/api/workshop?key={key}', timeout=5)
-            return resp
-        except Exception as e:
-            return e
+        if file is not None:
+            resp = requests.get(f'{api_server_url}/api/workshop?key={key}&file={os.path.basename(file)}', timeout=5)
+        else:
+            resp = requests.get(f'{api_server_url}/api/workshop?key={key}', timeout=5)
+        return resp
 
     def load(key):
         resp = validate_workshop(key, NEW_APISERVER_URL)

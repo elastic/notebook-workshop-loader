@@ -4,7 +4,7 @@ setup(
     name='notebookworkshoploader',
     packages=find_packages(),
     description='Notebook Env Loader',
-    version='1.0.0',
+    version='2.0.0',
     author='elastic-sa',
     install_requires=['python-dotenv', 'ipywidgets', 'requests']
 )
